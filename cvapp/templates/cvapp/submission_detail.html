@@ -1,0 +1,45 @@
+{% extends 'cvapp/base.html' %}
+{% block content %}
+
+<div class="card shadow-sm p-4 mb-4">
+  <h2 class="mb-3">{{ submission.name }}</h2>
+
+  <ul class="list-group list-group-flush mb-3">
+    <li class="list-group-item"><strong>Phone:</strong> {{ submission.phone }}</li>
+    <li class="list-group-item"><strong>Passport:</strong> {{ submission.passport_number }}</li>
+    <li class="list-group-item"><strong>Age:</strong> {{ submission.age }}</li>
+    <li class="list-group-item">
+      <strong>Description:</strong>
+      <p class="mt-1">{{ submission.self_description|linebreaks }}</p>
+    </li>
+    {% if submission.video %}
+    <li class="list-group-item">
+      <strong>Video:</strong> 
+      <a href="{{ submission.video.url }}" target="_blank" class="btn btn-outline-primary btn-sm">View uploaded video</a>
+    </li>
+    {% endif %}
+  </ul>
+
+  <div class="mt-3 d-flex gap-2">
+    <!-- ✅ Fixed Copy Link Button -->
+    <button class="btn btn-success btn-custom" 
+            onclick="copyPreviewLink('{{ request.scheme }}://{{ request.get_host }}{% url 'cvapp:preview_submission' submission.id %}')">
+      Copy Preview Link
+    </button>
+
+    <!-- Booking Button -->
+    <a href="{% url 'cvapp:book_submission' submission.id %}" class="btn btn-primary btn-custom">Book</a>
+  </div>
+</div>
+
+<script>
+function copyPreviewLink(url) {
+  navigator.clipboard.writeText(url).then(function() {
+    alert('✅ Preview link copied to clipboard:\n\n' + url);
+  }, function(err) {
+    alert('❌ Failed to copy link: ' + err);
+  });
+}
+</script>
+
+{% endblock %}

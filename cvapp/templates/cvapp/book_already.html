@@ -1,0 +1,15 @@
+{% extends 'cvapp/base.html' %}
+{% block content %}
+
+<div class="card shadow-sm p-4 mt-4">
+  <h2 class="mb-3 text-danger">Already Booked</h2>
+
+  <div class="alert alert-warning" role="alert">
+    This template is already booked by <strong>{{ submission.booked_by_name }}</strong> 
+    (<strong>{{ submission.booked_by_phone }}</strong>) on <strong>{{ submission.booked_at }}</strong>.
+  </div>
+
+  <a href="{% url 'cvapp:home' %}" class="btn btn-primary btn-custom">Back to Home</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ submission.name }} - Brochure</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 10px;
+      background: #f4f8ff;
+    }
+
+    .brochure-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      max-width: 950px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .image-section {
+      position: relative;
+      width: 100%;
+      height: 350px;
+      background: #000;
+    }
+
+    iframe, video {
+      width: 100%;
+      height: 100%;
+      border: none;
+      object-fit: cover;
+    }
+
+    .info-section {
+      flex: 1;
+      padding: 40px;
+      background: #f9fbff;
+    }
+
+    .info-section h2 {
+      color: #0d6efd;
+      font-size: 2rem;
+      margin-bottom: 5px;
+    }
+
+    .info-section h5 {
+      color: #555;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .info-section p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      color: #444;
+    }
+
+    .contact-info {
+      margin-top: 25px;
+      background: #eaf1ff;
+      border-left: 4px solid #0d6efd;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .contact-info strong {
+      color: #0d6efd;
+    }
+
+    .book-button {
+      margin-top: 25px;
+      display: inline-block;
+      background: {% if submission.booked %}#6c757d{% else %}#0d6efd{% endif %};
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      pointer-events: {% if submission.booked %}none{% else %}auto{% endif %};
+    }
+
+    .video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.video-wrapper video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Optional: make sure it scales nicely on small screens */
+@media (max-width: 600px) {
+  .video-wrapper {
+    padding-bottom: 65%; /* slightly taller for phones */
+  }
+}
+
+
+    .book-button:hover {
+      background: #084298;
+    }
+  </style>
+</head>
+<body>
+  <div class="brochure-card">
+    <!-- Video Section -->
+
+    {% if submission.video %}
+  <div class="video-wrapper">
+    <video controls playsinline>
+      <source src="{{ submission.video.url }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+{% endif %}
+
+
+    <!-- Info Section -->
+    <div class="info-section">
+      <h2>{{ submission.name}}</h2>
+        <p>{{ submission.self_description }}</p>
+      
+
+      <div class="contact-info">
+        <strong>📞 Phone:</strong> {{ submission.phone }}<br>
+          <strong>🪪 Passport:</strong> {{ submission.passport_number }}<br>
+
+          <strong>🎂 Age:</strong> {{ submission.age }}<br>
+      
+      
+          <strong>📘 Booked By:</strong> {{ submission.booked_by_name }} ({{ submission.booked_by_phone }})<br>
+       
+      </div>
+
+      {% if not submission.booked %}
+        <a href="{{ book_url }}" class="book-button">📖 Book Now</a>
+      {% else %}
+        <a class="book-button">✅ Already Booked</a>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>
