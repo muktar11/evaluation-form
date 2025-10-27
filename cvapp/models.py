@@ -6,15 +6,22 @@ from django.utils import timezone
 def video_upload_to(instance, filename):
     return f'videos/{uuid.uuid4()}_{filename}'
 
+
+
+
+
 class Submission(models.Model):
     """
     Stores the uploaded personal 'template' (video, desc + personal fields).
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=200)
-    phone = models.CharField(max_length=50)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    nationality = models.CharField(max_length=50)
     passport_number = models.CharField(max_length=100, blank=True, null=True)
     age = models.PositiveIntegerField(blank=True, null=True)
+    language = models.CharField(max_length=200, blank=True, null=True)
+    health = models.CharField(max_length=200, blank=True, null=True)
+    mental_state = models.CharField(max_length=200, blank=True, null=True)
     self_description = models.TextField(blank=True)
     video = models.FileField(upload_to=video_upload_to, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)

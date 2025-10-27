@@ -5,27 +5,49 @@
 <div class="container my-4">
   <div class="card shadow-sm p-4">
 
-    <!-- VIDEO SECTION -->
+    <!-- 🎥 قسم الفيديو -->
     {% if video_url %}
-    <div class="ratio ratio-16x9 mb-4">
-      <video controls>
-        <source src="{{ video_url }}" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+    <div class="d-flex justify-content-center mb-4">
+      <div class="ratio ratio-16x9" style="width: 75vw; max-width: 1200px;">
+        <video controls style="width: 100%; border-radius: 10px;">
+          <source src="{{ video_url }}" type="video/mp4">
+          متصفحك لا يدعم تشغيل الفيديو.
+        </video>
+      </div>
     </div>
     {% endif %}
 
-    <!-- INFO SECTION -->
-    <h2>{{ submission.name }}</h2>
-    <p><strong>Phone:</strong> {{ submission.phone }}</p>
-    {% if submission.passport_number %}<p><strong>Passport:</strong> {{ submission.passport_number }}</p>{% endif %}
-    {% if submission.age %}<p><strong>Age:</strong> {{ submission.age }}</p>{% endif %}
-    {% if submission.self_description %}<p><strong>Description:</strong> {{ submission.self_description|linebreaks }}</p>{% endif %}
+    <!-- ℹ️ قسم المعلومات -->
+    <h2 class="mb-3">{{ submission.name }}</h2>
 
-    <!-- BOOKING FORM -->
+    {% if submission.passport_number %}
+    <p><strong>رقم الترشيح:</strong> {{ submission.passport_number }}</p>
+    {% endif %}
+
+    {% if submission.age %}
+    <p><strong>العمر:</strong> {{ submission.age }}</p>
+    {% endif %}
+
+    {% if submission.language %}
+    <p><strong>اللغة:</strong> {{ submission.language }}</p>
+    {% endif %}
+
+    {% if submission.health %}
+    <p><strong>الحالة الصحية أثناء المقابلة:</strong> {{ submission.health }}</p>
+    {% endif %}
+
+    {% if submission.mental_state %}
+    <p><strong>المهارات:</strong> {{ submission.mental_state }}</p>
+    {% endif %}
+
+    {% if submission.self_description %}
+    <p><strong>الوصف الذاتي:</strong> {{ submission.self_description|linebreaks }}</p>
+    {% endif %}
+
+    <!-- 📝 نموذج الحجز -->
     {% if not submission.booked %}
     <hr>
-    <h4 class="mt-4">📖 Book This Candidate</h4>
+    <h4 class="mt-4">📖 حجز هذه المرشحة</h4>
     <form id="bookingForm" method="post" class="row g-3">
       {% csrf_token %}
       {% for field in form %}
@@ -38,38 +60,32 @@
       </div>
       {% endfor %}
       <div class="col-12 mt-3">
-        <button type="submit" class="btn btn-primary w-100">Submit Booking</button>
+        <button type="submit" class="btn btn-primary w-100">إرسال الحجز</button>
       </div>
     </form>
     {% else %}
     <div class="alert alert-success mt-4">
-      ✅ Already booked by <strong>{{ submission.booked_by_name }}</strong> ({{ submission.booked_by_phone }})
+      ✅ تم الحجز مسبقاً بواسطة <strong>{{ submission.booked_by_name }}</strong> ({{ submission.booked_by_phone }})
     </div>
     {% endif %}
-
-    <!-- COPY LINK -->
 
   </div>
 </div>
 
-
-<!-- TOAST CONTAINER -->
+<!-- ✅ نافذة الإشعار -->
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
   <div id="liveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
-      <div class="toast-body" id="toastMessage">Action completed successfully!</div>
+      <div class="toast-body" id="toastMessage">تم تنفيذ العملية بنجاح!</div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
     </div>
   </div>
 </div>
 
-
-<!-- JS -->
+<!-- ✅ السكربت -->
 <script>
 function copyPreviewLink(url) {
-  navigator.clipboard.writeText(url).then(function() {
-    showToast('✅ Preview link copied!');
-  });
+  navigator.clipboard.writeText(url).then(() => showToast('✅ تم نسخ رابط المعاينة!'));
 }
 
 function showToast(message) {
@@ -82,20 +98,17 @@ function showToast(message) {
 document.getElementById('bookingForm')?.addEventListener('submit', function(e) {
   e.preventDefault();
   const formData = new FormData(this);
-
   fetch("", {
     method: "POST",
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest'
-    },
+    headers: {'X-Requested-With': 'XMLHttpRequest'},
     body: formData
   })
   .then(response => response.text())
   .then(html => {
-    document.body.innerHTML = html;  // Re-render with updated info
-    showToast('✅ Booking successful!');
+    document.body.innerHTML = html;
+    showToast('✅ تم الحجز بنجاح!');
   })
-  .catch(() => showToast('❌ Booking failed.'));
+  .catch(() => showToast('❌ فشل في عملية الحجز.'));
 });
 </script>
 

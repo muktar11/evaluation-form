@@ -4,7 +4,8 @@ from .models import Submission, BookingNotification
 
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone', 'created_at', 'booked')
+    list_display = ('name', 'nationality', 
+                    'created_at', 'booked')
     list_filter = ('booked',)
 
 @admin.register(BookingNotification)
