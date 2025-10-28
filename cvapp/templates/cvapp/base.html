@@ -1,10 +1,10 @@
 <!-- templates/cvapp/base.html -->
 <!doctype html>
-<html lang="en">
+<html lang="ar">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CV Template App</title>
+  <title>تطبيق نموذج السيرة الذاتية</title>
 
   <!-- Bootstrap CSS -->
   <link
@@ -35,14 +35,14 @@
     }
 
     nav a {
-      margin-right: 15px;
+      margin-left: 15px;
     }
 
     .notification {
       background-color: #e9f3ff;
       padding: 12px 15px;
       margin: 10px 0;
-      border-left: 5px solid #0d6efd;
+      border-right: 5px solid #0d6efd;
       border-radius: 4px;
     }
 
@@ -69,29 +69,27 @@
       font-size: 0.9rem;
     }
   </style>
-
-
 </head>
 
 <body>
 <header class="shadow-sm bg-primary text-white py-3">
   <div class="container d-flex justify-content-between align-items-center">
-    <!-- Left: App Title -->
+    <!-- اليسار: عنوان التطبيق -->
     <h3 class="mb-0 fw-semibold">
       <a href="{% url 'cvapp:home' %}" class="text-white text-decoration-none">
-        CV Template App
+        تطبيق نموذج السيرة الذاتية
       </a>
     </h3>
 
-    <!-- Right: Action Buttons -->
+    <!-- اليمين: أزرار الإجراءات -->
     <div class="d-flex align-items-center gap-3">
-      <!-- Create Submission -->
+      <!-- إنشاء نموذج -->
       <a href="{% url 'cvapp:create_submission' %}" 
          class="btn btn-light btn-sm px-3 fw-semibold shadow-sm rounded-pill">
-         ➕ Create Submission
+         ➕ إنشاء نموذج
       </a>
 
-      <!-- Notification Bell -->
+      <!-- جرس الإشعارات -->
       <button class="btn btn-light btn-sm position-relative rounded-circle shadow-sm"
               data-bs-toggle="modal" data-bs-target="#notificationModal"
               style="width: 40px; height: 40px;">
@@ -106,16 +104,15 @@
   </div>
 </header>
 
+<main class="container mt-4">
+  {% block content %}{% endblock %}
+</main>
 
-  <main class="container mt-4">
-    {% block content %}{% endblock %}
-  </main>
+<footer class="py-3">
+  <p>&copy; {{ year|default:2025 }} تطبيق نموذج السيرة الذاتية. جميع الحقوق محفوظة.</p>
+</footer>
 
-  <footer class="py-3">
-    <p>&copy; {{ year|default:2025 }} CV Template App. All Rights Reserved.</p>
-  </footer>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

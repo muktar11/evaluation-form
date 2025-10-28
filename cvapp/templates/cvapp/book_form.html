@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="card shadow-sm p-4 mt-4">
-  <h2 class="mb-4">Book {{ submission.name }}</h2>
+  <h2 class="mb-4 text-primary">📖 حجز نموذج {{ submission.الاسم }}</h2>
 
   <form method="post" class="row g-3">
     {% csrf_token %}
@@ -22,7 +22,9 @@
     {% endfor %}
 
     <div class="col-12 mt-3">
-      <button type="submit" class="btn btn-primary btn-custom">Submit Booking</button>
+      <button type="submit" class="btn btn-primary btn-custom w-100">
+        إرسال الحجز
+      </button>
     </div>
   </form>
 </div>

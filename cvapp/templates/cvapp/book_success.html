@@ -2,13 +2,15 @@
 {% block content %}
 
 <div class="card shadow-sm p-4 mt-4 text-center">
-  <h2 class="mb-3 text-success">Booking Successful</h2>
+  <h2 class="mb-3 text-success">✅ تم الحجز بنجاح</h2>
 
   <div class="alert alert-success" role="alert">
-    You have successfully booked <strong>{{ submission.name }}</strong>.
+    لقد قمت بحجز نموذج <strong>{{ submission.الاسم }}</strong> بنجاح.
   </div>
 
-  <a href="{% url 'cvapp:home' %}" class="btn btn-primary btn-custom">Back to Home</a>
+  <a href="{% url 'cvapp:home' %}" class="btn btn-primary btn-custom">
+    العودة إلى الصفحة الرئيسية
+  </a>
 </div>
 
 {% endblock %}

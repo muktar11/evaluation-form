@@ -2,14 +2,16 @@
 {% block content %}
 
 <div class="card shadow-sm p-4 mt-4">
-  <h2 class="mb-3 text-danger">Already Booked</h2>
+  <h2 class="mb-3 text-danger">⚠️ تم الحجز مسبقاً</h2>
 
   <div class="alert alert-warning" role="alert">
-    This template is already booked by <strong>{{ submission.booked_by_name }}</strong> 
-    (<strong>{{ submission.booked_by_phone }}</strong>) on <strong>{{ submission.booked_at }}</strong>.
+    هذا النموذج تم حجزه مسبقاً بواسطة 
+    <strong>{{ submission.اسم_الحاجز }}</strong> 
+    (<strong>{{ submission.هاتف_الحاجز }}</strong>) 
+    بتاريخ <strong>{{ submission.تاريخ_الحجز }}</strong>.
   </div>
 
-  <a href="{% url 'cvapp:home' %}" class="btn btn-primary btn-custom">Back to Home</a>
+  <a href="{% url 'cvapp:home' %}" class="btn btn-primary btn-custom">العودة إلى الصفحة الرئيسية</a>
 </div>
 
 {% endblock %}

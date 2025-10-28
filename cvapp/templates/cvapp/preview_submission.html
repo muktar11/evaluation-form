@@ -2,56 +2,125 @@
 {% load widget_tweaks %}
 {% block content %}
 
-<div class="container my-4">
-  <div class="card shadow-sm p-4">
+<style>
+  /* ✅ Keep video & text side-by-side always */
+  .video-details-wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
 
-    <!-- 🎥 قسم الفيديو -->
-    {% if video_url %}
-    <div class="d-flex justify-content-center mb-4">
-      <div class="ratio ratio-16x9" style="width: 75vw; max-width: 1200px;">
-        <video controls style="width: 100%; border-radius: 10px;">
-          <source src="{{ video_url }}" type="video/mp4">
-          متصفحك لا يدعم تشغيل الفيديو.
-        </video>
-      </div>
-    </div>
+  /* 🎥 Video Section */
+  .video-section {
+    flex: 1;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .video-section video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Show entire video without cutting */
+    border: none;
+  }
+
+  /* 📝 Right Side: Info & Booking */
+  .details-section {
+    flex: 1;
+    background-color: #fff;
+    padding: 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  /* 📱 Responsive: stay half-half but shrink proportionally */
+  @media (max-width: 768px) {
+    .video-details-wrapper {
+      flex-direction: row;
+      height: 100vh;
+      flex-wrap: nowrap;
+    }
+
+    .video-section,
+    .details-section {
+      flex: 1 1 50%;
+      width: 50%;
+      height: 100%;
+    }
+
+    .details-section {
+      padding: 1rem;
+    }
+
+    .video-section video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transform: scale(0.9);
+    }
+  }
+
+  /* UI tweaks */
+  h2 {
+    font-weight: 700;
+    color: #0d6efd;
+  }
+</style>
+
+<div class="video-details-wrapper">
+
+  <!-- 🎥 Video -->
+  {% if submission.الفيديو %}
+  <div class="video-section">
+    <video controls>
+      <source src="{{ submission.الفيديو.url }}" type="video/mp4">
+      متصفحك لا يدعم تشغيل الفيديو.
+    </video>
+  </div>
+  {% endif %}
+
+  <!-- 📝 Info & Booking -->
+  <div class="details-section">
+    <h2 class="mb-3">{{ submission.الاسم }}</h2>
+
+    {% if submission.رقم_الترشيح %}
+    <p><strong>رقم الترشيح:</strong> {{ submission.رقم_الترشيح }}</p>
     {% endif %}
 
-    <!-- ℹ️ قسم المعلومات -->
-    <h2 class="mb-3">{{ submission.name }}</h2>
-
-    {% if submission.passport_number %}
-    <p><strong>رقم الترشيح:</strong> {{ submission.passport_number }}</p>
+    {% if submission.العمر %}
+    <p><strong>العمر:</strong> {{ submission.العمر }}</p>
     {% endif %}
 
-    {% if submission.age %}
-    <p><strong>العمر:</strong> {{ submission.age }}</p>
+    {% if submission.اللغة %}
+    <p><strong>اللغة:</strong> {{ submission.اللغة }}</p>
     {% endif %}
 
-    {% if submission.language %}
-    <p><strong>اللغة:</strong> {{ submission.language }}</p>
+    {% if submission.الحالة_الصحية %}
+    <p><strong>الحالة الصحية أثناء المقابلة:</strong> {{ submission.الحالة_الصحية }}</p>
     {% endif %}
 
-    {% if submission.health %}
-    <p><strong>الحالة الصحية أثناء المقابلة:</strong> {{ submission.health }}</p>
+    {% if submission.الحالة_النفسية %}
+    <p><strong>الحالة النفسية:</strong> {{ submission.الحالة_النفسية }}</p>
     {% endif %}
 
-    {% if submission.mental_state %}
-    <p><strong>المهارات:</strong> {{ submission.mental_state }}</p>
+    {% if submission.المهارات_الأساسية %}
+    <p><strong>المهارات الأساسية:</strong> {{ submission.المهارات_الأساسية|linebreaks }}</p>
     {% endif %}
 
-    {% if submission.self_description %}
-    <p><strong>الوصف الذاتي:</strong> {{ submission.self_description|linebreaks }}</p>
-    {% endif %}
+    <hr class="my-4">
 
-    <!-- 📝 نموذج الحجز -->
-    {% if not submission.booked %}
-    <hr>
-    <h4 class="mt-4">📖 حجز هذه المرشحة</h4>
+    {% if not submission.تم_الحجز %}
+    <h4 class="mt-4 text-secondary">📖 حجز هذه المرشحة</h4>
     <form id="bookingForm" method="post" class="row g-3">
       {% csrf_token %}
       {% for field in form %}
-      <div class="col-md-6">
+      <div class="col-12">
         <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
         {{ field|add_class:"form-control" }}
         {% for error in field.errors %}
@@ -65,14 +134,14 @@
     </form>
     {% else %}
     <div class="alert alert-success mt-4">
-      ✅ تم الحجز مسبقاً بواسطة <strong>{{ submission.booked_by_name }}</strong> ({{ submission.booked_by_phone }})
+      ✅ تم الحجز مسبقاً بواسطة
+      <strong>{{ submission.اسم_الحاجز }}</strong> ({{ submission.هاتف_الحاجز }})
     </div>
     {% endif %}
-
   </div>
 </div>
 
-<!-- ✅ نافذة الإشعار -->
+<!-- ✅ Toast Notification -->
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
   <div id="liveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
@@ -82,7 +151,7 @@
   </div>
 </div>
 
-<!-- ✅ السكربت -->
+<!-- JS -->
 <script>
 function copyPreviewLink(url) {
   navigator.clipboard.writeText(url).then(() => showToast('✅ تم نسخ رابط المعاينة!'));
